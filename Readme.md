@@ -1,7 +1,7 @@
 # Личный проект «Код и Магия» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Алексей Исаев](https://up.htmlacademy.ru/javascript/7/user/110324).
-* Наставник: `Неизвестно`.
+* Наставник: `Дмитрий Демешкин`.
 
 ---
 
