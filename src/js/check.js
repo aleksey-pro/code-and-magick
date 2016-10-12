@@ -18,7 +18,7 @@ function getMessage(a, b){
     for (var i = 0; i < a.length; i++) {
       numberOfSteps += a[i];
     }
-      return "Я прошел " + numberOfSteps + " шагов";
+      return "Я прошёл " + numberOfSteps + " шагов";
   }
 
   if (Array.isArray(a) && Array.isArray(b)) {
@@ -26,7 +26,7 @@ function getMessage(a, b){
     for (var i = 0; i < a.length; i++){
       distancePath += a[i] * b[i];
     }
-    return "Я прошел " + distancePath + " метров";
+    return "Я прошёл " + distancePath + " метров";
   }
 
   return "Переданы некорректные данные";
