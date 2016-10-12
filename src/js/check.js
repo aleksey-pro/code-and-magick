@@ -2,8 +2,8 @@
 
 function getMessage(a, b){
 	var typeOfA = typeof a;
-	if (a) {
-		if (a === true) {
+	if (typeof a == "boolean") {
+		if (typeOfA === true) {
 			return "Я попал в " + b;
 		}
 		else {
@@ -27,4 +27,3 @@ function getMessage(a, b){
     return "Переданы некорректные данные";
   }
 }
-
