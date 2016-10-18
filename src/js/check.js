@@ -14,7 +14,7 @@ function getMessage(a, b) {
     return 'Я прыгнул на ' + a * 100 + ' сантиметров';
   }
 
-  if (!(Array.isArray(a) && !Array.isArray(b))) {
+  if (Array.isArray(a) && !Array.isArray(b)) {
     var numberOfSteps = 0;
     for (var i = 0; i < a.length; i++) {
       numberOfSteps += a[i];
