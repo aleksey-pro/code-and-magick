@@ -1,32 +1,33 @@
-'use strict'
+'use strict';
 
-function getMessage(a, b){
-	var typeOfA = typeof a;
-	var typeOfB = typeof b;
-	if (typeOfA == 'boolean') {
-		if (a === true){
-			 return("Я попал в " + b);
-		}
-		else (a === false) {
-    return("Я никуда не попал");
+window.getMessage = getMessage;
+
+function getMessage(a, b) {
+  if (typeof a === 'boolean') {
+    if (a) {
+      return 'Я попал в ' + b;
+    } else {
+      return 'Я никуда не попал';
     }
-	}else if (typeOfA == 'number'){
-		  return("Я прыгнул на " + a * 100 + " сантиметров");
-	}else if (typeOfA == 'object' && typeOfB != 'object'){
-				var numberOfSteps = 0;
-				for (var i =0; i < a.length; i++) {
-					 numberOfSteps += a[i];
-				}return("Я прошел " + numberOfSteps + " шагов");
-	}else if (typeOfA == 'object' && typeOfB == 'object'){
-			var c = [];
-			for (i =0; i < a.length; i++){
-				c.push(a[i] * b[i]); 
-			}
-			var distancePath = 0;
-				for (var i =0; i < c.length; i++) {
-					 distancePath += c[i];
-				}return("Я прошел " + distancePath + " метров")   
-	}else{
-    return("Переданы некорректные данные");
   }
+  if (typeof a === 'number') {
+    return 'Я прыгнул на ' + a * 100 + ' сантиметров';
+  }
+
+  if (Array.isArray(a) && !Array.isArray(b)) {
+    var numberOfSteps = 0;
+    for (var i = 0; i < a.length; i++) {
+      numberOfSteps += a[i];
+    }
+    return 'Я прошёл ' + numberOfSteps + ' шагов';
+  }
+
+  if (Array.isArray(a) && Array.isArray(b)) {
+    var distancePath = 0;
+    for (i = 0; i < a.length; i++) {
+      distancePath += a[i] * b[i];
+    }
+    return 'Я прошёл ' + distancePath + ' метров';
+  }
+  return 'Переданы некорректные данные';
 }
