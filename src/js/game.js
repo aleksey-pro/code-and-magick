@@ -419,6 +419,7 @@ window.Game = (function() {
         var marginTop = 460;
         var lineHeight = 25;
 
+
         // Для позиционирования использовал смещение по координатам
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(410, 410, 250, 150);
