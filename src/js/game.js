@@ -407,22 +407,85 @@ window.Game = (function() {
     /**
      * Отрисовка экрана паузы.
      */
+    // Я никак не могу понять, как в данном случае правильно пользоваться контекстом при отрисовке canvas.
+    // В строке 263   this.container = container;
+    // и строке 264   this.canvas = document.createElement('canvas'); - создается ли этот самый canvas, внутри
+    // которого и должна создаваться прорисовка выводящихся сообщений?? Здесь контекст указывает на объект Game на сколько я понимаю.
+    // Из этого получается, что document.createElement('canvas'); будет лишним.
+    // Но как например можно было бы управлять местоположением выводящихся сообщений??..
+    //
+    // Ты говоришь, что нужно использовать  this.canvas - он как раз и будет ссылаться на этот внешний container из
+    // строки 263 ??
+    // То есть дополнительного элемента как в строках 425 - 432 уже создавать не надо?
+
+
     _drawPauseScreen: function() {
+
+      function drawPause(text, MessageBox) {
+
+        // this.MessageBox = MessageBox;
+        // this.canvas = document.createElement('canvas');
+        // this.canvas.width = MessageBox.wdth;
+        // this.canvas.height = MessageBox.height;
+        // this.MessageBox.appendChild(this.canvas);
+        // MessageBox.setAttribute = ('width', 400);
+        // MessageBox.setAttribute = ('height', 400);
+        // return MessageBox;
+
+        this.ctx = this.canvas.getContext('2d');
+
+        var MESSAGE_SIZE = 200;
+        var maxWidth = MESSAGE_SIZE;
+        var marginLeft = 50;
+        var marginTop = 60;
+        var lineHeight = 25;
+
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        this.ctx.fillRect(20, 20, 300, 150);
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.fillRect(10, 10, 300, 150);
+        this.ctx.font = '18px PT Mono';
+        this.ctx.fillStyle = '#000000';
+        wrapText(ctx, text, marginLeft, marginTop, maxWidth, lineHeight);
+
+
+        //Фунцкия переноса строк
+        function wrapText(ctx, text, marginLeft, marginTop, maxWidth, lineHeight) {
+          var words = text.split(" ");
+          var countWords = words.length;
+          var line = "";
+          for (var n = 0; n < countWords; n++) {
+            var testLine = line + words[n] + " ";
+            var testWidth = ctx.measureText(testLine).width;
+            if (testWidth > maxWidth) {
+              ctx.fillText(line, marginLeft, marginTop);
+              line = words[n] + " ";
+              marginTop += lineHeight;
+            }
+            else {
+              line = testLine;
+            }
+          }
+          ctx.fillText(line, marginLeft, marginTop);
+        } //wrapText
+
+      } //drawPause
+
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          return drawPause("Вы выиграли!");
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          return drawPause("Вы проиграли!");
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          return drawPause("Вы нажали на паузу!");
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          return drawPause("Приветсвуем Вас в игре! Начинаем сражение!!!!");
           break;
       }
-    },
+    }, //_drawPauseScreen
 
     /**
      * Предзагрузка необходимых изображений для уровня.
