@@ -397,7 +397,7 @@ window.Game = (function() {
       if (evt.keyCode === 32 && !this._deactivated) {
         evt.preventDefault();
         var needToRestartTheGame = this.state.currentStatus === Verdict.WIN ||
-            this.state.currentStatus === Verdict.FAIL;
+          this.state.currentStatus === Verdict.FAIL;
         this.initializeLevelAndStart(needToRestartTheGame);
 
         window.removeEventListener('keydown', this._pauseListener);
@@ -407,28 +407,60 @@ window.Game = (function() {
     /**
      * Отрисовка экрана паузы.
      */
+
     _drawPauseScreen: function() {
+
+      var ctx = this.ctx;
+      var maxWidth = 200;
+      var marginLeft = 230;
+      var marginTop = 60;
+      var lineHeight = 25;
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillRect(230, 30, 250, 150);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(220, 20, 250, 150);
+      ctx.font = '18px PT Mono';
+      ctx.fillStyle = '#000000';
+
+      function drawPause(text) {
+        var words = text.split(' ');
+        var countWords = words.length;
+        var line = ' ';
+        for (var n = 0; n < countWords; n++) {
+          var testLine = line + words[n] + ' ';
+          var testWidth = ctx.measureText(testLine).width;
+          if (testWidth > maxWidth) {
+            ctx.fillText(line, marginLeft, marginTop);
+            line = words[n] + ' ';
+            marginTop += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, marginLeft, marginTop);
+      }
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          drawPause('Вы выиграли! Поздравляем с победой!!!');
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          drawPause('Вы проиграли! Не отчаивайтесь и попробуйте еще раз.');
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          drawPause('Вы нажали на паузу! Еще раз на пробел чтобы снять с паузы.');
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          drawPause('Приветсвуем Вас в игре! Начинаем сражение и вперед!');
           break;
       }
     },
 
-    /**
-     * Предзагрузка необходимых изображений для уровня.
-     * @param {function} callback
-     * @private
-     */
+  /**
+   * Предзагрузка необходимых изображений для уровня.
+   * @param {function} callback
+   * @private
+    */
     _preloadImagesForLevel: function(callback) {
       if (typeof this._imagesArePreloaded === 'undefined') {
         this._imagesArePreloaded = [];
@@ -461,19 +493,19 @@ window.Game = (function() {
       }
     },
 
-    /**
-     * Обновление статуса объектов на экране. Добавляет объекты, которые должны
-     * появиться, выполняет проверку поведения всех объектов и удаляет те, которые
-     * должны исчезнуть.
-     * @param {number} delta Время, прошеднее с отрисовки прошлого кадра.
-     */
+  /**
+   * Обновление статуса объектов на экране. Добавляет объекты, которые должны
+   * появиться, выполняет проверку поведения всех объектов и удаляет те, которые
+   * должны исчезнуть.
+   * @param {number} delta Время, прошеднее с отрисовки прошлого кадра.
+   */
     updateObjects: function(delta) {
       // Персонаж.
       var me = this.state.objects.filter(function(object) {
         return object.type === ObjectType.ME;
       })[0];
 
-      // Добавляет на карту файрбол по нажатию на Shift.
+    // Добавляет на карту файрбол по нажатию на Shift.
       if (this.state.keysPressed.SHIFT) {
         this.state.objects.push({
           direction: me.direction,
@@ -485,30 +517,27 @@ window.Game = (function() {
           x: me.direction & Direction.RIGHT ? me.x + me.width : me.x - 24,
           y: me.y + me.height / 2
         });
-
         this.state.keysPressed.SHIFT = false;
       }
 
       this.state.garbage = [];
 
-      // Убирает в garbage не используемые на карте объекты.
+    // Убирает в garbage не используемые на карте объекты.
       var remainingObjects = this.state.objects.filter(function(object) {
         ObjectsBehaviour[object.type](object, this.state, delta);
-
         if (object.state === ObjectState.DISPOSED) {
           this.state.garbage.push(object);
           return false;
         }
-
         return true;
       }, this);
 
       this.state.objects = remainingObjects;
     },
 
-    /**
-     * Проверка статуса текущего уровня.
-     */
+  /**
+   * Проверка статуса текущего уровня.
+   */
     checkStatus: function() {
       // Нет нужны запускать проверку, нужно ли останавливать уровень, если
       // заранее известно, что да.
@@ -522,16 +551,15 @@ window.Game = (function() {
          * @type {Array.<functions(Object):Verdict>}
          */
         this.commonRules = [
-          /**
-           * Если персонаж мертв, игра прекращается.
-           * @param {Object} state
-           * @return {Verdict}
-           */
+        /**
+         * Если персонаж мертв, игра прекращается.
+         * @param {Object} state
+         * @return {Verdict}
+         */
           function(state) {
             var me = state.objects.filter(function(object) {
               return object.type === ObjectType.ME;
             })[0];
-
             return me.state === ObjectState.DISPOSED ?
                 Verdict.FAIL :
                 Verdict.CONTINUE;
@@ -546,11 +574,11 @@ window.Game = (function() {
             return state.keysPressed.ESC ? Verdict.PAUSE : Verdict.CONTINUE;
           },
 
-          /**
-           * Игра прекращается если игрок продолжает играть в нее два часа подряд.
-           * @param {Object} state
-           * @return {Verdict}
-           */
+        /**
+         * Игра прекращается если игрок продолжает играть в нее два часа подряд.
+         * @param {Object} state
+         * @return {Verdict}
+         */
           function(state) {
             return Date.now() - state.startTime > 3 * 60 * 1000 ?
                 Verdict.FAIL :
@@ -576,28 +604,27 @@ window.Game = (function() {
       this.state.currentStatus = currentCheck;
     },
 
-    /**
-     * Принудительная установка состояния игры. Используется для изменения
-     * состояния игры от внешних условий, например, когда необходимо остановить
-     * игру, если она находится вне области видимости и установить вводный
-     * экран.
-     * @param {Verdict} status
-     */
+  /**
+   * Принудительная установка состояния игры. Используется для изменения
+   * состояния игры от внешних условий, например, когда необходимо остановить
+   * игру, если она находится вне области видимости и установить вводный
+   * экран.
+   * @param {Verdict} status
+   */
     setGameStatus: function(status) {
       if (this.state.currentStatus !== status) {
         this.state.currentStatus = status;
       }
     },
 
-    /**
-     * Отрисовка всех объектов на экране.
-     */
+  /**
+   * Отрисовка всех объектов на экране.
+   */
     render: function() {
       // Удаление всех отрисованных на странице элементов.
       this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
-
-      // Выставление всех элементов, оставшихся в this.state.objects согласно
-      // их координатам и направлению.
+     // Выставление всех элементов, оставшихся в this.state.objects согласно
+     // их координатам и направлению.
       this.state.objects.forEach(function(object) {
         if (object.sprite) {
           var reversed = object.direction & Direction.LEFT;
@@ -607,12 +634,12 @@ window.Game = (function() {
       }, this);
     },
 
-    /**
-     * Основной игровой цикл. Сначала проверяет состояние всех объектов игры
-     * и обновляет их согласно правилам их поведения, а затем запускает
-     * проверку текущего раунда. Рекурсивно продолжается до тех пор, пока
-     * проверка не вернет состояние FAIL, WIN или PAUSE.
-     */
+  /**
+   * Основной игровой цикл. Сначала проверяет состояние всех объектов игры
+   * и обновляет их согласно правилам их поведения, а затем запускает
+   * проверку текущего раунда. Рекурсивно продолжается до тех пор, пока
+   * проверка не вернет состояние FAIL, WIN или PAUSE.
+   */
     update: function() {
       if (!this.state.lastUpdated) {
         this.state.lastUpdated = Date.now();
@@ -640,10 +667,10 @@ window.Game = (function() {
       }
     },
 
-    /**
-     * @param {KeyboardEvent} evt [description]
-     * @private
-     */
+  /**
+   * @param {KeyboardEvent} evt [description]
+   * @private
+   */
     _onKeyDown: function(evt) {
       switch (evt.keyCode) {
         case 37:
@@ -659,16 +686,15 @@ window.Game = (function() {
           this.state.keysPressed.ESC = true;
           break;
       }
-
       if (evt.shiftKey) {
         this.state.keysPressed.SHIFT = true;
       }
     },
 
-    /**
-     * @param {KeyboardEvent} evt [description]
-     * @private
-     */
+  /**
+   * @param {KeyboardEvent} evt [description]
+   * @private
+   */
     _onKeyUp: function(evt) {
       switch (evt.keyCode) {
         case 37:
@@ -684,25 +710,23 @@ window.Game = (function() {
           this.state.keysPressed.ESC = false;
           break;
       }
-
       if (evt.shiftKey) {
         this.state.keysPressed.SHIFT = false;
       }
     },
 
-    /** @private */
+  /** @private */
     _initializeGameListeners: function() {
       window.addEventListener('keydown', this._onKeyDown);
       window.addEventListener('keyup', this._onKeyUp);
     },
 
-    /** @private */
+  /** @private */
     _removeGameListeners: function() {
       window.removeEventListener('keydown', this._onKeyDown);
       window.removeEventListener('keyup', this._onKeyUp);
     }
   };
-
   Game.Verdict = Verdict;
 
   return Game;
