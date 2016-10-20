@@ -412,14 +412,14 @@ window.Game = (function() {
 
       var ctx = this.ctx;
       var maxWidth = 200;
-      var marginLeft = 330;
-      var marginTop = 140;
+      var marginLeft = 230;
+      var marginTop = 60;
       var lineHeight = 25;
 
       ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-      ctx.fillRect(320, 110, 250, 150);
+      ctx.fillRect(230, 30, 250, 150);
       ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(310, 100, 250, 150);
+      ctx.fillRect(220, 20, 250, 150);
       ctx.font = '18px PT Mono';
       ctx.fillStyle = '#000000';
 
@@ -442,16 +442,16 @@ window.Game = (function() {
       }
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          return drawPause('Вы выиграли! Поздравляем с победой!!!');
+          drawPause('Вы выиграли! Поздравляем с победой!!!');
           break;
         case Verdict.FAIL:
-          return drawPause('Вы проиграли! Не отчаивайтесь и попробуйте еще раз.');
+          drawPause('Вы проиграли! Не отчаивайтесь и попробуйте еще раз.');
           break;
         case Verdict.PAUSE:
-          return drawPause('Вы нажали на паузу! Еще раз на пробел чтобы снять с паузы.');
+          drawPause('Вы нажали на паузу! Еще раз на пробел чтобы снять с паузы.');
           break;
         case Verdict.INTRO:
-          return drawPause('Приветсвуем Вас в игре! Начинаем сражение и вперед!');
+          drawPause('Приветсвуем Вас в игре! Начинаем сражение и вперед!');
           break;
       }
     },
