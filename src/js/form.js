@@ -38,13 +38,18 @@ window.form = (function() {
   var requiredText = document.getElementById('review-text');
   requiredText.oninput = function() {
     document.querySelector('.review-fields-text').classList.add('invisible');
-
-    //здесь я не совсем понимаю по заданию - написано что вся форма .review-fields должна скрыться как все поля будут заполнены.
-    // Поскольку последней заполняется форма .review-fields-text  - я делаю скрытие .review-fields вместе с полем .review-fields-text.
-    //Просто если это не правильно, то к чему же привязать скрытие .review-fields?? Коллбеки ещё не проходятся в модуле.
-
-    document.querySelector('.review-fields').classList.add('invisible');
   };
+  // Здесь нужно было еще сделать обработку кнопки submit. Пока не работает. Не понятно по заданию  - валидность на что проверять?
+  // Тогда в HTML придется дописывать что-то типа pattern="A-Za-zА-Яа-яЁё" ??? Или имеется  в иду валидность на то, что
+  // они прошли проверку на required. Пока не понимаю тогда как это проверяется.
+  formRequired.addEventListener('submit', function(event) {
+    if (!requiredName.validity.valid && !requiredText.validity.valid) {
+      event.preventDefault();
+      document.className('review-submit').disabled = true;
+    } else {
+      document.querySelector('.review-fields').classList.add('invisible');
+    }
+  }, false);
 
   var form = {
     onClose: null,
