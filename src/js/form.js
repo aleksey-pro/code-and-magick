@@ -5,7 +5,6 @@ window.form = (function() {
   var formCloseButton = document.querySelector('.review-form-close');
   var formRequired = document.querySelector('.review-form');
   var inputsGroup = document.querySelector('.review-form-group');
-  var checkedStars = formRequired ['review-mark'].value;
 
   var requiredName = document.getElementById('review-name');
   requiredName.required = true;
@@ -15,7 +14,7 @@ window.form = (function() {
 
   function validate() {
     var elem = document.getElementById('review-text');
-    elem.required = Number(checkedStars) < 3;
+    elem.required = Number(formRequired['review-mark'].value) < 3;
   }
 
   inputsGroup.onchange = function() {
@@ -28,13 +27,11 @@ window.form = (function() {
   requiredText.oninput = function() {
     document.querySelector('.review-fields-text').classList.add('invisible');
   };
-  // Здесь нужно было еще сделать обработку кнопки submit. Пока не работает. Не понятно по заданию  - валидность на что проверять?
-  // Тогда в HTML придется дописывать что-то типа pattern="A-Za-zА-Яа-яЁё" ??? Или имеется  в иду валидность на то, что
-  // они прошли проверку на required.
+
   formRequired.addEventListener('submit', function(event) {
     if (!requiredName.validity.valid && !requiredText.validity.valid) {
       event.preventDefault();
-      document.className('review-submit').disabled = true;
+      document.querySelector('.review-submit').disabled = true;
     } else {
       document.querySelector('.review-fields').classList.add('invisible');
     }
