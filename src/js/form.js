@@ -4,8 +4,8 @@ window.form = (function() {
   var formContainer = document.querySelector('.overlay-container');
   var formCloseButton = document.querySelector('.review-form-close');
   var formRequired = document.querySelector('.review-form');
-  var inputs = formRequired.elements['review-mark'];
   var inputsGroup = document.querySelector('.review-form-group');
+  var checkedStars = formRequired ['review-mark'].value;
 
   var requiredName = document.getElementById('review-name');
   requiredName.required = true;
@@ -13,25 +13,16 @@ window.form = (function() {
     document.querySelector('.review-fields-name').classList.add('invisible');
   };
 
-  function validate(checkedElem) {
-    for ( var j = 0; j < inputs.length; j++ ) {
-      if (checkedElem < 3) {
-        var elem = document.getElementById('review-text');
-        elem.required = true;
-      }
-    }
+  function validate() {
+    var elem = document.getElementById('review-text');
+    elem.required = Number(checkedStars) < 3;
   }
 
   inputsGroup.onchange = function() {
-    for ( var n = 0; n < inputs.length; n++ ) {
-      if (inputs[n].checked) {
-        var checkedElem = inputs[n].value;
-        validate(checkedElem);
-      }
-    }
+    validate();
   };
 
-  validate(checkedElem);
+  validate();
 
   var requiredText = document.getElementById('review-text');
   requiredText.oninput = function() {
