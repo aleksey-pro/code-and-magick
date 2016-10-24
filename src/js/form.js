@@ -6,36 +6,35 @@ window.form = (function() {
   var formRequired = document.querySelector('.review-form');
   var inputsGroup = document.querySelector('.review-form-group');
 
+  function validate() {
+    var elem = document.getElementById('review-text');
+    elem.required = Number(formRequired['review-mark'].value) < 3;
+  }
+  inputsGroup.onchange = function() {
+    validate();
+  };
+  validate();
+
   var requiredName = document.getElementById('review-name');
   requiredName.required = true;
   requiredName.oninput = function() {
     document.querySelector('.review-fields-name').classList.add('invisible');
   };
-
-  function validate() {
-    var elem = document.getElementById('review-text');
-    elem.required = Number(formRequired['review-mark'].value) < 3;
-  }
-
-  inputsGroup.onchange = function() {
-    validate();
-  };
-
-  validate();
-
   var requiredText = document.getElementById('review-text');
   requiredText.oninput = function() {
     document.querySelector('.review-fields-text').classList.add('invisible');
   };
 
-  formRequired.addEventListener('submit', function(event) {
-    if (!requiredName.validity.valid && !requiredText.validity.valid) {
+  function validateSubmit(event) {
+    if (requiredName.validity.valueMissing && requiredText.validity.valueMissing) {
       event.preventDefault();
       document.querySelector('.review-submit').disabled = true;
     } else {
       document.querySelector('.review-fields').classList.add('invisible');
     }
-  }, false);
+  }
+  requiredText.addEventListener('keyup', validateSubmit);
+  requiredName.addEventListener('keyup', validateSubmit);
 
   var form = {
     onClose: null,
