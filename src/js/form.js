@@ -8,61 +8,61 @@ window.form = (function() {
     requiredText = document.getElementById('review-text'),  // требуемое поле Отзыв
     requiredName = document.getElementById('review-name'), // требуемое поле Имя
     hidingBlock = document.querySelector('.review-fields'),
+    inputsGroup = document.querySelector('.review-form-group'), // группа звездочек
     hidingName = document.querySelector('.review-fields-name'), // скрываемое имя
     hidingTstml = document.querySelector('.review-fields-text');//скрываемый отзыв
 
   submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
-  hidingBlock.classList.remove('invisible'); // блок показан
 
-  formRequired.onchange = function() {
+  function validate() {
     requiredText.required = Number(formRequired['review-mark'].value) < 3;
     if (requiredText.required) {
-      validate1();
+      if (requiredName.value !== '' && requiredText.value === '') {
+        hidingBlock.classList.remove('invisible'); // показываем блок
+        hidingTstml.classList.remove('invisible'); // показываем лейбл "отзыв"
+        hidingName.classList.add('invisible'); // скрываем лейбл "имя"
+        submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
+      } else if (requiredName.value === '' && requiredText.value !== '') {
+        hidingBlock.classList.remove('invisible'); // показываем блок
+        hidingName.classList.remove('invisible'); // покажем лейбл "имя"
+        hidingTstml.classList.add('invisible'); // скрываем лейбл "отзыв"
+        submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
+      } else if (requiredName.value === '' && requiredText.value === '') {
+        hidingBlock.classList.remove('invisible'); // показываем блок
+        hidingName.classList.remove('invisible'); // покажем лейбл "имя"
+        hidingTstml.classList.remove('invisible'); // показываем лейбл "отзыв"
+        submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
+      } else if (requiredName.value !== '' && requiredText.value !== '') {
+        hidingBlock.classList.add('invisible'); // скрываем блок
+        submitButton.removeAttribute('disabled'); // активируем кнопку
+      }
     } else {
-      validate2();
-    }
-  };
-  function validate1() {
-    if (requiredName.value !== '' && requiredText.value === '') {
-      hidingBlock.classList.remove('invisible'); // показываем блок
-      hidingTstml.classList.remove('invisible'); // показываем лейбл "отзыв"
-      hidingName.classList.add('invisible'); // скрываем лейбл "имя"
-      submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
-    } else if (requiredName.value === '' && requiredText.value !== '') {
-      hidingBlock.classList.remove('invisible'); // показываем блок
-      hidingName.classList.remove('invisible'); // покажем лейбл "имя"
-      hidingTstml.classList.add('invisible'); // скрываем лейбл "отзыв"
-      submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
-    } else if (requiredName.value === '' && requiredText.value === '') {
-      hidingBlock.classList.remove('invisible'); // показываем блок
-      hidingName.classList.remove('invisible'); // покажем лейбл "имя"
-      hidingTstml.classList.remove('invisible'); // показываем лейбл "отзыв"
-      submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
-    } else if (requiredName.value !== '' && requiredText.value !== '') {
-      hidingBlock.classList.add('invisible'); // скрываем блок
-      submitButton.removeAttribute('disabled'); // активируем кнопку
+      if(requiredName.value !== '' && requiredText.value === '') {
+        hidingBlock.classList.add('invisible'); // скрываем блок
+        submitButton.removeAttribute('disabled'); // активируем кнопку
+      } else if (requiredName.value === '' && requiredText.value !== '') {
+        hidingBlock.classList.remove('invisible'); // показываем блок
+        hidingName.classList.remove('invisible'); // покажем лейбл "имя"
+        hidingTstml.classList.add('invisible'); // скрываем лейбл "отзыв"
+        submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
+      } else if (requiredName.value === '' && requiredText.value === '') {
+        hidingBlock.classList.remove('invisible'); // показываем блок
+        hidingName.classList.remove('invisible'); // покажем лейбл "имя"
+        hidingTstml.classList.add('invisible'); // скрываем лейбл "отзыв"
+        submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
+      } else if (requiredName.value !== '' && requiredText.value !== '') {
+        hidingBlock.classList.add('invisible'); // скрываем блок
+        submitButton.removeAttribute('disabled'); // активируем кнопку
+      }
     }
   }
 
-  function validate2() {
-    if(requiredName.value !== '' && requiredText.value === '') {
-      hidingBlock.classList.add('invisible'); // скрываем блок
-      submitButton.removeAttribute('disabled'); // активируем кнопку
-    } else if (requiredName.value === '' && requiredText.value !== '') {
-      hidingBlock.classList.remove('invisible'); // показываем блок
-      hidingName.classList.remove('invisible'); // покажем лейбл "имя"
-      hidingTstml.classList.add('invisible'); // скрываем лейбл "отзыв"
-      submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
-    } else if (requiredName.value === '' && requiredText.value === '') {
-      hidingBlock.classList.remove('invisible'); // показываем блок
-      hidingName.classList.remove('invisible'); // покажем лейбл "имя"
-      hidingTstml.classList.remove('invisible'); // показываем лейбл "отзыв"
-      submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
-    } else if (requiredName.value !== '' && requiredText.value !== '') {
-      hidingBlock.classList.add('invisible'); // скрываем блок
-      submitButton.removeAttribute('disabled'); // активируем кнопку
-    }
-  }
+  inputsGroup.onchange = validate;
+  requiredText.oninput = validate;
+  requiredName.oninput = validate;
+
+  validate();
+
 
   var form = {
     onClose: null,
