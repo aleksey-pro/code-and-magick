@@ -1,6 +1,7 @@
 'use strict';
 
 window.form = (function() {
+
   var formContainer = document.querySelector('.overlay-container'), // див в котором форма
     formCloseButton = document.querySelector('.review-form-close'), // кнопка закрытия
     formRequired = document.querySelector('.review-form'), // форма
@@ -41,12 +42,44 @@ window.form = (function() {
     }
   }
 
-  inputsGroup.onchange = validate;
-  requiredText.oninput = validate;
-  requiredName.oninput = validate;
-
   validate();
 
+  requiredText.oninput = validate;
+  inputsGroup.addEventListener('change', validate);
+  inputsGroup.addEventListener('change', setCookie);
+  requiredName.addEventListener('change', validate);
+  requiredName.addEventListener('change', setCookie);
+
+  function setCookie() {
+    var cookieName = requiredName.value;
+    var cookieStars = formRequired['review-mark'].value;
+    Cookies.set('review-name', cookieName, {expires: diff});
+    Cookies.set('review-mark', cookieStars, {expires: diff});
+  }
+
+  //нахождение разности дней
+
+  var todayFull = new Date(); // определим дату в этом году
+  var today = +todayFull; //переведем текующую дату в ms
+  var birth = new Date(); // определим дату рождения
+  birth.setMonth(11); // установим месяц даты рождения
+  birth.setDate(9); // установим число дня рождения
+  var birthday = +birth; //  переведем дату рождения в ms
+
+  if (birthday < today) { // если дата рождения раньше текущей даты
+    var diff = Math.round((today - birthday) / (24 * 60 * 60 * 1000)); // вычтем из текующей даты дату рождения
+  } else {
+    birth.setFullYear(todayFull.getFullYear() - 1); //найдем дату рождения в прошлом году
+    birthday = +birth;
+    diff = Math.round((today - birthday) / (24 * 60 * 60 * 1000));
+  }
+
+  document.addEventListener('DOMContentLoaded', insertCookies);
+
+  function insertCookies() {
+    requiredName.value = Cookies.get('review-name');
+    formRequired['review-mark'].value = Cookies.get('review-mark');
+  }
 
   var form = {
     onClose: null,
@@ -67,7 +100,6 @@ window.form = (function() {
       }
     }
   };
-
 
   formCloseButton.onclick = function(evt) {
     evt.preventDefault();
