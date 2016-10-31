@@ -47,8 +47,8 @@ window.form = (function() {
   requiredText.oninput = validate;
   inputsGroup.addEventListener('change', validate);
   inputsGroup.addEventListener('change', setCookie);
-  requiredName.addEventListener('change', validate);
-  requiredName.addEventListener('change', setCookie);
+  requiredName.addEventListener('input', validate);
+  requiredName.addEventListener('input', setCookie);
 
   function setCookie() {
     var cookieName = requiredName.value;
