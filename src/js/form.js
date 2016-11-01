@@ -65,6 +65,9 @@ window.form = (function() {
 
   //нахождение разности дней
   function getDateDiff() {
+    if (diff) {
+      return diff;
+    }
     var today = new Date(); // определим дату в этом году
     var birthday = new Date(); // определим дату рождения
     birthday.setMonth(11); // установим месяц даты рождения
