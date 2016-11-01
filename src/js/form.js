@@ -1,6 +1,7 @@
 'use strict';
 
 window.form = (function() {
+
   var formContainer = document.querySelector('.overlay-container'), // див в котором форма
     formCloseButton = document.querySelector('.review-form-close'), // кнопка закрытия
     formRequired = document.querySelector('.review-form'), // форма
@@ -11,6 +12,8 @@ window.form = (function() {
     inputsGroup = document.querySelector('.review-form-group'), // группа звездочек
     hidingName = document.querySelector('.review-fields-name'), // скрываемое имя
     hidingTstml = document.querySelector('.review-fields-text');//скрываемый отзыв
+
+  var diff;
 
   submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
 
@@ -41,12 +44,50 @@ window.form = (function() {
     }
   }
 
-  inputsGroup.onchange = validate;
-  requiredText.oninput = validate;
-  requiredName.oninput = validate;
-
   validate();
 
+  requiredText.oninput = validate;
+  inputsGroup.onchange = function() {
+    validate();
+    setCookie();
+  };
+  requiredName.oninput = function() {
+    validate();
+    setCookie();
+  };
+
+  function setCookie() {
+    var cookieName = requiredName.value;
+    var cookieStars = formRequired['review-mark'].value;
+    Cookies.set('review-name', cookieName, {expires: getDateDiff()});
+    Cookies.set('review-mark', cookieStars, {expires: getDateDiff()});
+  }
+
+  //нахождение разности дней
+  function getDateDiff() {
+    if (diff) {
+      return diff;
+    }
+    var today = new Date(); // определим дату в этом году
+    var birthday = new Date(); // определим дату рождения
+    birthday.setMonth(11); // установим месяц даты рождения
+    birthday.setDate(9); // установим число дня рождения
+    if (birthday > today) {
+      birthday.setFullYear(today.getFullYear() - 1); //найдем дату рождения в прошлом году
+    }
+    diff = Math.round((today - birthday) / (24 * 60 * 60 * 1000));
+    return diff;
+  }
+
+  document.addEventListener('DOMContentLoaded', insertCookies);
+
+  function insertCookies() {
+    var reviewerName = Cookies.get('review-name');
+    if(typeof reviewerName === 'string') {
+      requiredName.value = reviewerName;
+    }
+    formRequired['review-mark'].value = Cookies.get('review-mark');
+  }
 
   var form = {
     onClose: null,
@@ -67,7 +108,6 @@ window.form = (function() {
       }
     }
   };
-
 
   formCloseButton.onclick = function(evt) {
     evt.preventDefault();
