@@ -13,6 +13,8 @@ window.form = (function() {
     hidingName = document.querySelector('.review-fields-name'), // скрываемое имя
     hidingTstml = document.querySelector('.review-fields-text');//скрываемый отзыв
 
+  var diff;
+
   submitButton.setAttribute('disabled', 'disabled'); // кнопка отключена
 
   function validate() {
@@ -45,39 +47,41 @@ window.form = (function() {
   validate();
 
   requiredText.oninput = validate;
-  inputsGroup.addEventListener('change', validate);
-  inputsGroup.addEventListener('change', setCookie);
-  requiredName.addEventListener('input', validate);
-  requiredName.addEventListener('input', setCookie);
+  inputsGroup.onchange = function() {
+    validate();
+    setCookie();
+  };
+  requiredName.oninput = function() {
+    validate();
+    setCookie();
+  };
 
   function setCookie() {
     var cookieName = requiredName.value;
     var cookieStars = formRequired['review-mark'].value;
-    Cookies.set('review-name', cookieName, {expires: diff});
-    Cookies.set('review-mark', cookieStars, {expires: diff});
+    Cookies.set('review-name', cookieName, {expires: getDateDiff()});
+    Cookies.set('review-mark', cookieStars, {expires: getDateDiff()});
   }
 
   //нахождение разности дней
-
-  var todayFull = new Date(); // определим дату в этом году
-  var today = +todayFull; //переведем текующую дату в ms
-  var birth = new Date(); // определим дату рождения
-  birth.setMonth(11); // установим месяц даты рождения
-  birth.setDate(9); // установим число дня рождения
-  var birthday = +birth; //  переведем дату рождения в ms
-
-  if (birthday < today) { // если дата рождения раньше текущей даты
-    var diff = Math.round((today - birthday) / (24 * 60 * 60 * 1000)); // вычтем из текующей даты дату рождения
-  } else {
-    birth.setFullYear(todayFull.getFullYear() - 1); //найдем дату рождения в прошлом году
-    birthday = +birth;
+  function getDateDiff() {
+    var today = new Date(); // определим дату в этом году
+    var birthday = new Date(); // определим дату рождения
+    birthday.setMonth(11); // установим месяц даты рождения
+    birthday.setDate(9); // установим число дня рождения
+    if (birthday > today) {
+      birthday.setFullYear(today.getFullYear() - 1); //найдем дату рождения в прошлом году
+    }
     diff = Math.round((today - birthday) / (24 * 60 * 60 * 1000));
+    return diff;
   }
 
   document.addEventListener('DOMContentLoaded', insertCookies);
 
   function insertCookies() {
-    requiredName.value = Cookies.get('review-name');
+    if(typeof (requiredName.value) === 'string') {
+      requiredName.value = Cookies.get('review-name');
+    }
     formRequired['review-mark'].value = Cookies.get('review-mark');
   }
 
