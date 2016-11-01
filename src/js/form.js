@@ -82,8 +82,9 @@ window.form = (function() {
   document.addEventListener('DOMContentLoaded', insertCookies);
 
   function insertCookies() {
-    if(typeof (requiredName.value) === 'string') {
-      requiredName.value = Cookies.get('review-name');
+    var reviewerName = Cookies.get('review-name');
+    if(typeof reviewerName === 'string') {
+      requiredName.value = reviewerName;
     }
     formRequired['review-mark'].value = Cookies.get('review-mark');
   }
