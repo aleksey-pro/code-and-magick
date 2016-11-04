@@ -150,7 +150,7 @@ var getReviewsElement = function(review) {
   reviewElement.querySelector('.review-rating').textContent = review.rating;
   reviewElement.querySelector('.review-text').textContent = review.description;
 
-  var reviewImage = new Image(124, 124);
+  var reviewImage = new Image();
 
   reviewImage.onload = function() {
     reviewElement.querySelector('.review-author').src = review.author.picture;
@@ -161,6 +161,9 @@ var getReviewsElement = function(review) {
   reviewImage.src = review.author.picture;
   reviewImage.alt = review.author.name;
   reviewImage.title = review.author.name;
+  reviewImage.height = '124px';
+  reviewImage.width = '124px';
+
   return reviewElement;
 };
 
