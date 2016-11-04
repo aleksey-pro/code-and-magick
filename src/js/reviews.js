@@ -145,24 +145,26 @@ var template = document.querySelector('#review-template');
 var container = document.querySelector('.reviews-list');
 var templateContainer = 'content' in template ? template.content : template;
 
-var getReviewsElement = function(review) {
+var getReviewsElement;
+getReviewsElement = function (review) {
   var reviewElement = templateContainer.querySelector('.review').cloneNode(true);
   reviewElement.querySelector('.review-rating').textContent = review.rating;
   reviewElement.querySelector('.review-text').textContent = review.description;
 
   var reviewImage = new Image();
 
-  reviewImage.onload = function() {
-    reviewElement.querySelector('.review-author').src = review.author.picture;
+  reviewImage.onload = function () {
+    var imgTag = reviewElement.querySelector('.review-author');
+    imgTag.src = review.author.picture;
+    imgTag.alt = review.author.name;
+    imgTag.title = review.author.name;
+    imgTag.height = 124;
+    imgTag.width = 124;
   };
-  reviewImage.onerror = function() {
+  reviewImage.onerror = function () {
     reviewElement.classList.add('review-load-failure');
   };
   reviewImage.src = review.author.picture;
-  reviewImage.alt = review.author.name;
-  reviewImage.title = review.author.name;
-  reviewImage.height = '124';
-  reviewImage.width = '124';
 
   return reviewElement;
 };
