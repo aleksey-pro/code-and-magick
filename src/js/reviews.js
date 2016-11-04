@@ -146,14 +146,14 @@ var container = document.querySelector('.reviews-list');
 var templateContainer = 'content' in template ? template.content : template;
 
 var getReviewsElement;
-getReviewsElement = function (review) {
+getReviewsElement = function(review) {
   var reviewElement = templateContainer.querySelector('.review').cloneNode(true);
   reviewElement.querySelector('.review-rating').textContent = review.rating;
   reviewElement.querySelector('.review-text').textContent = review.description;
 
   var reviewImage = new Image();
 
-  reviewImage.onload = function () {
+  reviewImage.onload = function() {
     var imgTag = reviewElement.querySelector('.review-author');
     imgTag.src = review.author.picture;
     imgTag.alt = review.author.name;
@@ -161,7 +161,7 @@ getReviewsElement = function (review) {
     imgTag.height = 124;
     imgTag.width = 124;
   };
-  reviewImage.onerror = function () {
+  reviewImage.onerror = function() {
     reviewElement.classList.add('review-load-failure');
   };
   reviewImage.src = review.author.picture;
