@@ -145,8 +145,7 @@ var template = document.querySelector('#review-template');
 var container = document.querySelector('.reviews-list');
 var templateContainer = 'content' in template ? template.content : template;
 
-var getReviewsElement;
-getReviewsElement = function(review) {
+var getReviewsElement = function(review) {
   var reviewElement = templateContainer.querySelector('.review').cloneNode(true);
   reviewElement.querySelector('.review-rating').textContent = review.rating;
   reviewElement.querySelector('.review-text').textContent = review.description;
