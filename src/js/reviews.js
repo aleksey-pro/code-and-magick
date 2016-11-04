@@ -161,8 +161,8 @@ var getReviewsElement = function(review) {
   reviewImage.src = review.author.picture;
   reviewImage.alt = review.author.name;
   reviewImage.title = review.author.name;
-  reviewImage.height = '124px';
-  reviewImage.width = '124px';
+  reviewImage.height = '124';
+  reviewImage.width = '124';
 
   return reviewElement;
 };
