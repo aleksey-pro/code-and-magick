@@ -7,11 +7,11 @@ var template = document.querySelector('#review-template');
 var container = document.querySelector('.reviews-list');
 var templateContainer = 'content' in template ? template.content : template;
 
-var load = function(url, callback, JSONPCallback) {
+var reviews = function(url, callback, JSONPCallback) {
   if (!JSONPCallback) {
     JSONPCallback = 'cb' + Date.now();
   }
-  window.JSONPCallback = function(data) {
+  window[JSONPCallback] = function(data) {
     callback(data);
   };
   var script = document.createElement('script');
@@ -37,17 +37,17 @@ var getReviewsElement = function(review) {
   reviewImage.onerror = function() {
     reviewElement.classList.add('review-load-failure');
   };
-  reviewImage.src = review.author.picture;// щачем нужен повторно,если в 34 строке путь прописан?
+  reviewImage.src = review.author.picture;// зачем нужен повторно,если в 34 строке путь прописан?
 
   return reviewElement; // почему в данном случае необходим return?
 };
 
-var renderReviews = function(reviews) {
-  reviews.forEach(function(review) {
+var renderReviews = function(data) {
+  data.forEach(function(review) {
     container.appendChild(getReviewsElement(review));
   });
 };
 
-load('http://localhost:1507/api/reviews', renderReviews, 'JSONPCallback');
+reviews('http://localhost:1507/api/reviews', renderReviews, 'JSONPCallback');
 
 filters.classList.remove('invisible');
