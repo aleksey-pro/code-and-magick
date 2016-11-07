@@ -13,10 +13,18 @@ var reviews = function(url, callback, JSONPCallback) {
   }
   window[JSONPCallback] = function(data) {
     callback(data);
+    script.parentNode.removeChild(script);
+    delete window[JSONPCallback];
+
   };
   var script = document.createElement('script');
   script.src = url + '?callback=' + JSONPCallback;
   document.body.appendChild(script);
+
+  script.onerror = function() {
+    this.remove();
+    delete window[JSONPCallback];
+  };
 };
 
 var getReviewsElement = function(review) {
