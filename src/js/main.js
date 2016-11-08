@@ -1,7 +1,7 @@
 'use strict';
 
-(function() {
-  var game = new window.Game(document.querySelector('.demo'));
+require(['form', 'game', 'review', 'reviews', 'load'], function(form, game, review, reviews, load) {
+  game = new window.Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
   game.setGameStatus(window.Game.Verdict.INTRO);
 
@@ -11,13 +11,12 @@
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
 
-    window.form.open(function() {
+    form.open(function() { // полагаю, что form теперь не в глобальной области видимости - поэтому удалил window.
       game.setGameStatus(window.Game.Verdict.PAUSE);
       game.setDeactivated(true);
     });
   };
-
-  window.form.onClose = function() {
+  form.onClose = function() {
     game.setDeactivated(false);
   };
-})();
+});

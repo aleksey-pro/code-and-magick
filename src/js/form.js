@@ -1,6 +1,6 @@
 'use strict';
 
-window.form = (function() {
+define(function() {
 
   var formContainer = document.querySelector('.overlay-container'), // див в котором форма
     formCloseButton = document.querySelector('.review-form-close'), // кнопка закрытия
@@ -115,4 +115,4 @@ window.form = (function() {
   };
 
   return form;
-})();
+});
