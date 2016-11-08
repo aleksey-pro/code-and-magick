@@ -22,7 +22,7 @@ var reviews = function(url, callback, JSONPCallback) {
   document.body.appendChild(script);
 
   script.onerror = function() {
-    this.remove();
+    this.parentNode.removeChild(script);
     delete window[JSONPCallback];
   };
 };
