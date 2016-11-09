@@ -1,6 +1,5 @@
 'use strict';
-require(['./form', './game', './load'], function(form, Game, load) { // здесь не проходит валидация slint так как
-// form и load - неиспользуемые аргументы
+require(['./form', './game', './load', './reviews'], function(form, Game, load, renderReviews) {
   var game = new Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
   game.setGameStatus(Game.Verdict.INTRO);
@@ -16,5 +15,6 @@ require(['./form', './game', './load'], function(form, Game, load) { // здес
   form.onClose = function() {
     game.setDeactivated(false);
   };
-  load('http://localhost:1507/api/reviews', renderReviews, 'JSONPCallback');
+  var url = 'http://localhost:1507/api/reviews';
+  load(url, renderReviews, 'JSONPCallback');
 });
