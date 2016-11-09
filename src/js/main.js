@@ -8,12 +8,12 @@ require(['./form', './game', './load'], function(form, Game, load) { // здес
   /** @param {MouseEvent} evt */
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
-    window.form.open(function() {
+    form.open(function() {
       game.setGameStatus(Game.Verdict.PAUSE);
       game.setDeactivated(true);
     });
   };
-  window.form.onClose = function() {
+  form.onClose = function() {
     game.setDeactivated(false);
   };
   load('http://localhost:1507/api/reviews', renderReviews, 'JSONPCallback');
