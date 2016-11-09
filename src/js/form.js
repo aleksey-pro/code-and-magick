@@ -2,7 +2,8 @@
 
 define(function() {
 
-  window.form = (function() {
+  // window.form = (function() {
+  var form = function() {
     var formContainer = document.querySelector('.overlay-container'), // див в котором форма
       formCloseButton = document.querySelector('.review-form-close'), // кнопка закрытия
       formRequired = document.querySelector('.review-form'), // форма
@@ -92,7 +93,6 @@ define(function() {
 
     var form = {
       onClose: null,
-
       /**
        * @param {Function} cb
        */
@@ -113,6 +113,6 @@ define(function() {
       evt.preventDefault();
       form.close();
     };
-    return form;
-  })();
+  };
+  return form;
 });

@@ -1,7 +1,7 @@
 'use strict';
 
 define(function() {
-  window.Game = (function() {
+  function Game() {
     /**
      * @const
      * @type {number}
@@ -639,7 +639,6 @@ define(function() {
       }
     };
     Game.Verdict = Verdict;
-
-    return Game;
-  })();
+  }
+  return Game;
 });

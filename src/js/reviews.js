@@ -4,9 +4,10 @@
 
 define(['./review'], function(getReviewsElement) {
   var container = document.querySelector('.reviews-list');
-  return function(data) {
+  var renderReviews =  function(data) {
     data.forEach(function(review) {
       container.appendChild(getReviewsElement(review));
     });
   };
+  return renderReviews;
 });
