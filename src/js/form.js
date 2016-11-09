@@ -1,7 +1,6 @@
 'use strict';
 
-window.form = (function() {
-
+define(function() {
   var formContainer = document.querySelector('.overlay-container'), // див в котором форма
     formCloseButton = document.querySelector('.review-form-close'), // кнопка закрытия
     formRequired = document.querySelector('.review-form'), // форма
@@ -83,7 +82,7 @@ window.form = (function() {
 
   function insertCookies() {
     var reviewerName = Cookies.get('review-name');
-    if(typeof reviewerName === 'string') {
+    if (typeof reviewerName === 'string') {
       requiredName.value = reviewerName;
     }
     formRequired['review-mark'].value = Cookies.get('review-mark');
@@ -91,7 +90,6 @@ window.form = (function() {
 
   var form = {
     onClose: null,
-
     /**
      * @param {Function} cb
      */
@@ -108,11 +106,9 @@ window.form = (function() {
       }
     }
   };
-
   formCloseButton.onclick = function(evt) {
     evt.preventDefault();
     form.close();
   };
-
   return form;
-})();
+});
