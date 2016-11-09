@@ -2,15 +2,13 @@
 
 //отрисовка одного элемента списка
 
-define(function(){
+define(function() {
   var filters = document.querySelector('.reviews-filter');
   filters.classList.add('invisible');
-
   var template = document.querySelector('#review-template');
-  var container = document.querySelector('.reviews-list');
   var templateContainer = 'content' in template ? template.content : template;
 
-  var getReviewsElement = function(review) {
+  return function(review) {
     var reviewElement = templateContainer.querySelector('.review').cloneNode(true);
     reviewElement.querySelector('.review-rating').textContent = review.rating;
     reviewElement.querySelector('.review-text').textContent = review.description;

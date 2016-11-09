@@ -2,8 +2,8 @@
 
 //загрузка с сервера в нем обращаемся к renderReviews, поэтому reviews - это зависимость
 
-define('servercallback', ['reviews'], function(reviews) {
-  reviews = function(url, callback, JSONPCallback) {
+define(['./reviews'], function(renderReviews) {
+  var load = function(url, callback, JSONPCallback) {
     if (!JSONPCallback) {
       JSONPCallback = 'cb' + Date.now();
     }
@@ -21,5 +21,5 @@ define('servercallback', ['reviews'], function(reviews) {
       delete window[JSONPCallback];
     };
   };
-  reviews('http://localhost:1507/api/reviews', renderReviews, 'JSONPCallback');
+  return load('http://localhost:1507/api/reviews', renderReviews, 'JSONPCallback');
 });

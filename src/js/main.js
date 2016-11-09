@@ -1,22 +1,19 @@
 'use strict';
-
-require(['form', 'game', 'review', 'reviews', 'load'], function(form, game, review, reviews, load) {
+require(['./form', './game', './load'], function(form, game, load) { // здесь не проходит валидация slint так как
+// form и load - неиспользуемые аргументы
   game = new window.Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
   game.setGameStatus(window.Game.Verdict.INTRO);
-
   var formOpenButton = document.querySelector('.reviews-controls-new');
-
   /** @param {MouseEvent} evt */
   formOpenButton.onclick = function(evt) {
     evt.preventDefault();
-
-    form.open(function() { // полагаю, что form теперь не в глобальной области видимости - поэтому удалил window.
+    window.form.open(function() {
       game.setGameStatus(window.Game.Verdict.PAUSE);
       game.setDeactivated(true);
     });
   };
-  form.onClose = function() {
+  window.form.onClose = function() {
     game.setDeactivated(false);
   };
 });
