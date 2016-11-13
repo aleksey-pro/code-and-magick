@@ -1,97 +1,100 @@
 'use strict';
 
-// Свойства объекта
-//
-// Свойства объекта создаются в функции-конструкторе
-//
-// Массив строк pictures: адреса фотографий, которые нужно показать. В этот массив нужно будет передать значения параметров src скриншотов из блока photogallery
-// Число activePicture: номер текущей фотографии в галерее
-// Ссылки на DOM-элементы:
-// элемент галереи overlay-gallery
-// элементы переключения фотографии overlay-gallery-control-left и overlay-gallery-control-right
-// номер фотографии preview-number-current и количество фотографий preview-number-total
-// элемент закрытия галереи overlay-gallery-close
-// Методы объекта
-//
-// Методы объекта должны быть описаны в прототипе, потому что они повторяются для всех объектов, создающихся конструктором Gallery. Методы управляют свойствами объекта.
-//
-//     show принимает на вход число
-// Добавляет обработчики событий DOM-элементам галереи.
-//     Показывает фотогалерею, убирая у ее DOM-элемента класс invisible.
-//     Вызывает метод setActivePicture, передав в него параметром число, которое было передано параметром в show.
-//     hide убирает фотогалерею
-// Добавлет DOM-элементу фотогалереи класс invisible.
-//     Удаляет обработчики событий, записывая в них значение null.
-//     setActivePicture принимает на вход число и записывает его в свойство activePicture. После этого находит в массиве pictures фотографию с нужным индексом, создает для нее DOM-элемент Image с помощью конструктора, записывает ему src нужной фотографии и ставит его в конец блока overlay-gallery-preview. Если в блоке overlay-gallery-preview уже есть фотография, ее нужно предварительно удалить (или воспользоваться методом replaceChild). После этого метод записывает номер показанной фотографии в блок preview-number-current.
-//     Обработчики событий
-//
-// Обработчик события click по элементу gallery-overlay-close, который вызывает метод hide.
-//     Обработчик события click по элементам overlay-gallery-control-left и overlay-gallery-control-right, которые показывают, соответственно следующую или предыдущую фотографию из списка вызывая метод setActivePicture с соответствующим параметром. Показ галереи не зацикливается, например, если мы находимся на последней фотографии, при клике на контрол, переключающий на следующую фотографию ничего не происходит.
-
 define(function() {
-    var Gallery = function() {
-        this.pictures = [];
-        this.activePicture = 0;
+  var Gallery = function() {
 
-        this.galleryContainer = document.querySelector('.overlay-gallery');
-        this.closeElement = this.galleryContainer.querySelector('.overlay-gallery-close');
-        this.leftArrow = this.galleryContainer.querySelector('.overlay-gallery-control-left');
-        this.rightArrow = this.galleryContainer.querySelector('.overlay-gallery-control-right');
-        this.previewElement = this.galleryContainer.querySelector('.preview-number-current');
-        this.totalNumber = this.galleryContainer.querySelector('.preview-number-total');
+// Свойства объекта
+
+    this.pictureSection = document.querySelector('.photogallery');
+    this.pictures = this.pictureSection.querySelectorAll('a > img');
+    this.galleryContainer = document.querySelector('.overlay-gallery');
+    this.closeElement = this.galleryContainer.querySelector('.overlay-gallery-close');
+    this.leftArrow = this.galleryContainer.querySelector('.overlay-gallery-control-left');
+    this.rightArrow = this.galleryContainer.querySelector('.overlay-gallery-control-right');
+    this.previewContainer = this.galleryContainer.querySelector('.overlay-gallery-preview');
+    this.previewNumber = this.galleryContainer.querySelector('.preview-number-current');
+    this.totalNumber = this.galleryContainer.querySelector('.preview-number-total');
+  };
+
+// Методы объекта
+
+//show принимает на вход число
+  Gallery.prototype.show = function(index) {
+//  Показывает фотогалерею, убирая у ее DOM-элемента класс invisible.
+    this.galleryContainer.classList.remove('invisible');
+//  Вызывает метод setActivePicture, передав в него параметром число,
+// которое было передано параметром в show.
+    this.setActivePicture(index);
+
+// Добавляем обработчики событий DOM-элементам галереи
+
+//hide убирает фотогалерею
+    var self = this;
+
+    this.closeElement.onclick = function() {
+      self.hide();
     };
-
-    Gallery.prototype.show = function(pictures) {
-        // if (pictures !== this.galleryPictures) {
-        //     this.thumbnailsContainer.innerHTML = '';
-        //
-        //     this.galleryPictures = pictures;
-        //
-        //     pictures.forEach(function(pic) {
-        //         var pictureElement = new Image();
-        //         pictureElement.classList.add('gallery-thumbnails-image');
-        //         this.thumbnailsContainer.appendChild(pictureElement);
-        //         pictureElement.src = pic;
-        //     }, this);
-        // }
-        //
-        this.galleryContainer.classList.remove('invisible');
-
-        var self = this;
-
-        this.closeElement.onclick = function() {
-            self.hide();
-        };
-        this.leftArrow.onclick = function() {
-            self.setActivePicture(?);
-        };
-        this.rightArrow.onclick = function() {
-            self.setActivePicture(?);
-        };
-
-
-        // this.setActivePicture(0); передав в него параметром число, которое было передано параметром в show
-
+//перелистывание
+    this.leftArrow.onclick = function() {
+      self.moveleft();
     };
-
-    Gallery.prototype.hide = function() {
-        this.galleryContainer.classList.add('invisible');
-        this.closeElement.onclick = null;
+    this.rightArrow.onclick = function() {
+      self.moveright();
     };
+  };
 
-    Gallery.prototype.setActivePicture = function(picture) {
-        // this.activePicture = picture;
-        //
-        // var thumbnails = this.thumbnailsContainer.querySelectorAll('img');
-        //
-        // var currentlyActivePic = this.thumbnailsContainer.querySelector('.active');
-        // if (currentlyActivePic) {
-        //     currentlyActivePic.classList.remove('active');
-        // }
-        //
-        // thumbnails[picture].classList.add('active');
-        // this.previewElement.src = thumbnails[picture].src;
-    };
+//setActivePicture принимает на вход число и записывает его в свойство activePicture.
+  Gallery.prototype.setActivePicture = function(index) {
+    this.activePicture = this.pictures[index];
+//После этого находит в массиве pictures фотографию с нужным индексом,
+// создает для нее DOM-элемент Image с помощью конструктора, записывает
+// ему src нужной фотографии и ставит его в конец блока overlay-gallery-preview.
+    pictures.forEach(function(item, indx) {
+      if (indx === index) {
+        var activePicture = new Image();
+        activePicture.src = item.src;
+        this.previewContainer.appendChild(activePicture);
+        activePicture.height = 300;
+        activePicture.width = 300;
+      }
+    }, this);
+//Если в блоке overlay-gallery-preview уже есть фотография, ее нужно предварительно
+// удалить (или воспользоваться методом replaceChild).
+    if (this.previewContainer.contains(activePicture)) {
+      this.previewContainer.replaceChild(activePicture, activePicture);
+    }
+//После этого метод записывает номер показанной фотографии в блок preview-number-current.
+    this.previewNumber.textContent = index;
+  };
 
-    return new Gallery();
+//     Обработчики событий
+
+// Обработчик события click по элементу gallery-overlay-close, который вызывает метод hide.
+  Gallery.prototype.hide = function() {
+    this.galleryContainer.classList.add('invisible');
+    this.closeElement.onclick = null;
+  };
+
+//     Обработчик события click по элементам overlay-gallery-control-left
+// и overlay-gallery-control-right, которые показывают, соответственно
+// следующую или предыдущую фотографию из списка вызывая метод setActivePicture
+// с соответствующим параметром. Показ галереи не зацикливается, например, если
+// мы находимся на последней фотографии, при клике на контрол, переключающий
+// на следующую фотографию ничего не происходит.
+  Gallery.prototype.moveleft = function() {
+    this.setActivePicture(index--);
+    if (index < 0) {
+      this.leftArrow.onclick = null;
+    }
+  };
+  Gallery.prototype.moveright = function() {
+    this.setActivePicture(index++);
+    if (index = this.totalNumber.textContent) {
+      this.rightArrow.onclick = null;
+    }
+  };
+
+  return new Gallery();
 });
+
+
