@@ -25,7 +25,7 @@ define(function() {
 //  Вызывает метод setActivePicture, передав в него параметром число,
 // которое было передано параметром в show.
     this.setActivePicture(index);
-
+    this.index = index;
 // Добавляем обработчики событий DOM-элементам галереи
 
 //hide убирает фотогалерею
@@ -41,6 +41,12 @@ define(function() {
     this.rightArrow.onclick = function() {
       self.moveright();
     };
+//Если в блоке overlay-gallery-preview уже есть фотография, ее нужно предварительно
+// удалить (или воспользоваться методом replaceChild).
+    this.picture = this.pictures[index];
+    if (this.previewContainer.contains(this.picture)) {
+      this.previewContainer.removeChild(this.picture);
+    }
   };
 
 //setActivePicture принимает на вход число и записывает его в свойство activePicture.
@@ -58,11 +64,6 @@ define(function() {
         activePicture.width = 300;
       }
     }, this);
-//Если в блоке overlay-gallery-preview уже есть фотография, ее нужно предварительно
-// удалить (или воспользоваться методом replaceChild).
-    if (this.previewContainer.contains(activePicture)) {
-      this.previewContainer.replaceChild(activePicture, activePicture);
-    }
 //После этого метод записывает номер показанной фотографии в блок preview-number-current.
     this.previewNumber.textContent = index;
   };
@@ -73,6 +74,8 @@ define(function() {
   Gallery.prototype.hide = function() {
     this.galleryContainer.classList.add('invisible');
     this.closeElement.onclick = null;
+    this.leftArrow.onclick = null;
+    this.rightArrow.onclick = null;
   };
 
 //     Обработчик события click по элементам overlay-gallery-control-left
@@ -94,7 +97,7 @@ define(function() {
     }
   };
 
-  return new Gallery();
+  return Gallery;
 });
 
 
