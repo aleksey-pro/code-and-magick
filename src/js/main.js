@@ -21,15 +21,15 @@ require(['./form', './game', './load', './reviews', './gallery'], function(form,
   //В блоке main.js получите массив с адресами всех фотографий, лежащих в блоке photogallery.
   var pictures = document.querySelector('.photogallery').querySelectorAll('a > img');
   var links = document.querySelector('.photogallery').querySelectorAll('a');
-  var sources = pictures.forEach(function(item) {
-      return item.src;
+  var sources = pictures.map(function(item, i, pictures) {
+    return item.src;
   });
-  // Создайте переменную gallery запишите в нее объект, созданный функцией-конструктором Gallery, параметром конструктора передайте полученный
-  // ранее массив фотографий.
+  // // Создайте переменную gallery запишите в нее объект, созданный функцией-конструктором Gallery, параметром конструктора передайте полученный
+  // // ранее массив фотографий.
   var gallery = new Gallery(sources);
-  //Затем в модуле main.js добавьте ссылкам обработчики клика, которые вызывают
-  // метод show с соответствующим параметром ранее созданному объекту gallery.
-  links.onClick = function(sources) {
+  // //Затем в модуле main.js добавьте ссылкам обработчики клика, которые вызывают
+  // // метод show с соответствующим параметром ранее созданному объекту gallery.
+  links.onClick = function() {
     gallery.show(sources);
   };
 });
