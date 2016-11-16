@@ -55,7 +55,7 @@ define(function() {
 //После этого находит в массиве pictures фотографию с нужным индексом,
 // создает для нее DOM-элемент Image с помощью конструктора, записывает
 // ему src нужной фотографии и ставит его в конец блока overlay-gallery-preview.
-    pictures.forEach(function(item, indx) {
+    Array.prototype.forEach.call(pictures, function() {
       if (indx === index) {
         var activePicture = new Image();
         activePicture.src = item.src;
