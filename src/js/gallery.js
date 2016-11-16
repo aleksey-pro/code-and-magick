@@ -4,7 +4,6 @@ define(function() {
   var Gallery = function() {
 
 // Свойства объекта
-
     this.pictureSection = document.querySelector('.photogallery');
     this.pictures = this.pictureSection.querySelectorAll('a > img');
     this.galleryContainer = document.querySelector('.overlay-gallery');
@@ -19,18 +18,16 @@ define(function() {
 // Методы объекта
 
 //show принимает на вход число
-  Gallery.prototype.show = function(index) {
+  Gallery.prototype.show = function(sources) {
 //  Показывает фотогалерею, убирая у ее DOM-элемента класс invisible.
     this.galleryContainer.classList.remove('invisible');
 //  Вызывает метод setActivePicture, передав в него параметром число,
 // которое было передано параметром в show.
-    this.setActivePicture(index);
-    this.index = index;
+    this.setActivePicture(sources);
+
 // Добавляем обработчики событий DOM-элементам галереи
-
-//hide убирает фотогалерею
     var self = this;
-
+//hide убирает фотогалерею
     this.closeElement.onclick = function() {
       self.hide();
     };
@@ -41,31 +38,31 @@ define(function() {
     this.rightArrow.onclick = function() {
       self.moveright();
     };
-//Если в блоке overlay-gallery-preview уже есть фотография, ее нужно предварительно
-// удалить (или воспользоваться методом replaceChild).
-    this.picture = this.pictures[index];
-    if (this.previewContainer.contains(this.picture)) {
-      this.previewContainer.removeChild(this.picture);
-    }
   };
 
 //setActivePicture принимает на вход число и записывает его в свойство activePicture.
-  Gallery.prototype.setActivePicture = function(index) {
-    this.activePicture = this.pictures[index];
+  Gallery.prototype.setActivePicture = function(sources) {
+    this.activePicture = this.pictures[sources];
+//Если в блоке overlay-gallery-preview уже есть фотография, ее нужно предварительно
+// удалить (или воспользоваться методом replaceChild).
+    if (this.activePicture) {
+      this.activePicture.parentNode.removeChild(this.activePicture);
+    }
 //После этого находит в массиве pictures фотографию с нужным индексом,
 // создает для нее DOM-элемент Image с помощью конструктора, записывает
 // ему src нужной фотографии и ставит его в конец блока overlay-gallery-preview.
-    Array.prototype.forEach.call(pictures, function() {
-      if (indx === index) {
+    this.index = Object.keys(this.pictures);// может еще надо приветси индексы в числа? Так как метод выводит строки.
+    Array.prototype.forEach.call(this.pictures, function(item, indx) {
+      if (indx === this.index) {
         var activePicture = new Image();
         activePicture.src = item.src;
         this.previewContainer.appendChild(activePicture);
         activePicture.height = 300;
         activePicture.width = 300;
+//После этого метод записывает номер показанной фотографии в блок preview-number-current.
+        this.previewNumber.textContent = indx;
       }
     }, this);
-//После этого метод записывает номер показанной фотографии в блок preview-number-current.
-    this.previewNumber.textContent = index;
   };
 
 //     Обработчики событий
@@ -85,19 +82,16 @@ define(function() {
 // мы находимся на последней фотографии, при клике на контрол, переключающий
 // на следующую фотографию ничего не происходит.
   Gallery.prototype.moveleft = function() {
-    this.setActivePicture(index--);
-    if (index < 0) {
+    this.setActivePicture(this.index--);
+    if (this.index < 0) {
       this.leftArrow.onclick = null;
     }
   };
   Gallery.prototype.moveright = function() {
-    this.setActivePicture(index++);
-    if (index = this.totalNumber.textContent) {
+    this.setActivePicture(this.index++);
+    if (this.index === this.totalNumber.textContent) {
       this.rightArrow.onclick = null;
     }
   };
-
   return Gallery;
 });
-
-
