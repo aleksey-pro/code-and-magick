@@ -20,19 +20,20 @@ require(['./form', './game', './load', './reviews', './gallery'], function(form,
   // Экспортируйте из модуля функцию-конструктор галереи и подключите его как зависимость в блоке main.js.
   // В блоке main.js получите массив с адресами всех фотографий, лежащих в блоке photogallery.
   var pictureSection = document.querySelector('.photogallery');
-  var pictures = document.querySelector('.photogallery').querySelectorAll('a > img');
+  var links = pictureSection.querySelectorAll('a');
+  var imgs = document.querySelector('.photogallery').querySelectorAll('a > img');
   var sources = [];
-  for (var i = 0, l = pictures.length; i < l; i++) {
-    sources.push(pictures[i].src);
+  for (var index = 0, l = imgs.length; index < l; index++) {
+    sources.push(imgs[index].src);
   }
   // Создайте переменную gallery запишите в нее объект, созданный функцией-конструктором Gallery, параметром конструктора передайте полученный
   // ранее массив фотографий.
   var gallery = new Gallery(sources);
   //Затем в модуле main.js добавьте ссылкам обработчики клика, которые вызывают
   // метод show с соответствующим параметром ранее созданному объекту gallery.
-  pictureSection.onclick = function(event, sources) {
-    //if (event.target.tagName === 'img') { //если кликнуто по картинке, никак не срабатывает.
-      gallery.show(sources);
-    //}
-  };
+  for (var j = 0; j < links.length; j++) {
+    links[j].onclick = function() {
+      gallery.show(index);
+    };
+  }
 });
