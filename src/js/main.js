@@ -23,17 +23,17 @@ require(['./form', './game', './load', './reviews', './gallery'], function(form,
   var links = pictureSection.querySelectorAll('a');
   var imgs = document.querySelector('.photogallery').querySelectorAll('a > img');
   var sources = [];
-  for (var index = 0, l = imgs.length; index < l; index++) {
-    sources.push(imgs[index].src);
+  for (var i = 0, l = imgs.length; i < l; i++) {
+    sources.push(imgs[i].src);
   }
   // Создайте переменную gallery запишите в нее объект, созданный функцией-конструктором Gallery, параметром конструктора передайте полученный
   // ранее массив фотографий.
   var gallery = new Gallery(sources);
   //Затем в модуле main.js добавьте ссылкам обработчики клика, которые вызывают
   // метод show с соответствующим параметром ранее созданному объекту gallery.
-  for (var j = 0; j < links.length; j++) {
-    links[j].onclick = function() {
+  Array.prototype.forEach.call(links, function(link, index) {
+    link.onclick = function() {
       gallery.show(index);
     };
-  }
+  });
 });
