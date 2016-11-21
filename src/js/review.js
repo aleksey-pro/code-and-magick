@@ -21,10 +21,10 @@ define(function() {
     self.quizContainer.onclick = function(event) {
       if (event.target.tagName !== 'SPAN') return;
       for (var i = 0; i < self.quizElems.length; i++) {
-        if (self.quizElems[i].classList.contains('active')) {
-          self.quizElems[i].classList.remove('active');
+        if (self.quizElems[i].classList.contains('review-quiz-answer-active')) {
+          self.quizElems[i].classList.remove('review-quiz-answer-active');
         }
-        event.target.classList.add('active');
+        event.target.classList.add('review-quiz-answer-active');
       }
     };
   };
