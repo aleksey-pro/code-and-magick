@@ -3,31 +3,58 @@
 //отрисовка одного элемента списка
 
 define(function() {
-  var filters = document.querySelector('.reviews-filter');
-  filters.classList.add('invisible');
-  var template = document.querySelector('#review-template');
-  var templateContainer = 'content' in template ? template.content : template;
 
-  return function(review) {
-    var reviewElement = templateContainer.querySelector('.review').cloneNode(true);
-    reviewElement.querySelector('.review-rating').textContent = review.rating;
-    reviewElement.querySelector('.review-text').textContent = review.description;
+  var Review = function(data) {
+    data = this.data;
+    this.element = document.querySelector('#review-template');
+    this.templateContainer = 'content' in this.element ? this.element.content : this.element;
 
-    var reviewImage = new Image();
-
-    reviewImage.onload = function() {
-      var imgTag = reviewElement.querySelector('.review-author');
-      imgTag.src = review.author.picture;
-      imgTag.alt = review.author.name;
-      imgTag.title = review.author.name;
-      imgTag.height = 124;
-      imgTag.width = 124;
-    };
-    reviewImage.onerror = function() {
-      reviewElement.classList.add('review-load-failure');
-    };
-    reviewImage.src = review.author.picture;
-    filters.classList.remove('invisible');
-    return reviewElement;
+  // не являются элементами блока this.element
+    this.filters = document.querySelector('.reviews-filter');
+    this.filters.classList.add('invisible');
   };
+
+  Review.prototype.setActiveLink = function() {
+    this.quizContainer = this.element.querySelector('.review-quiz');
+    this.quizElems = this.element.querySelectorAll('.review-quiz-answer');
+    var self = this;
+    self.quizContainer.onclick = function(event) {
+      if (event.target.tagName !== 'SPAN') return;
+      for (var i = 0; i < self.quizElems.length; i++) {
+        if (self.quizElems[i].classList.contains('active')) {
+          self.quizElems[i].classList.remove('active');
+        }
+        event.target.classList.add('active');
+      }
+    };
+  };
+  Review.prototype.removeActiveLink = function() {
+    var self = this;
+    self.quizContainer.onclick = null;
+  };
+
+  Review.prototype.createReviewElement = function(review) {
+    this.review = review;
+    this.reviewElement = this.templateContainer.querySelector('.review').cloneNode(true);
+    this.reviewElement.querySelector('.review-rating').textContent = review.rating;
+    this.reviewElement.querySelector('.review-text').textContent = review.description;
+
+    var self = this;
+    this.reviewImage = new Image();
+    this.reviewImage.onload = function() {
+      self.imgTag = self.reviewElement.querySelector('.review-author');
+      self.imgTag.src = review.author.picture;
+      self.imgTag.alt = review.author.name;
+      self.imgTag.title = review.author.name;
+      self.imgTag.height = 124;
+      self.imgTag.width = 124;
+    };
+    this.reviewImage.onerror = function() {
+      self.reviewElement.classList.add('review-load-failure');
+    };
+    this.reviewImage.src = review.author.picture;
+    this.filters.classList.remove('invisible');
+    return this.reviewElement;
+  };
+  return Review;
 });

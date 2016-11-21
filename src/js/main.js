@@ -1,5 +1,5 @@
 'use strict';
-require(['./form', './game', './load', './reviews', './gallery'], function(form, Game, load, Review, Gallery) {
+require(['./form', './game', './load', './reviews', './gallery'], function(form, Game, load, renderReviews, Gallery) {
   var game = new Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
   game.setGameStatus(Game.Verdict.INTRO);
@@ -14,12 +14,6 @@ require(['./form', './game', './load', './reviews', './gallery'], function(form,
   };
   form.onClose = function() {
     game.setDeactivated(false);
-  };
-  var renderReviews = function(data) {
-    var container = document.querySelector('.reviews-list');
-    data.forEach(function(reviewEl) {
-      container.appendChild(new Review(reviewEl).element);
-    });
   };
   var url = 'http://localhost:1507/api/reviews';
   load(url, renderReviews, 'JSONPCallback');
