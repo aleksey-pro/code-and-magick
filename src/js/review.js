@@ -5,13 +5,8 @@
 define(function() {
 
   var Review = function(data) {
-    data = this.data;
-    this.element = document.querySelector('#review-template');
-    this.templateContainer = 'content' in this.element ? this.element.content : this.element;
-
-  // не являются элементами блока this.element
-    this.filters = document.querySelector('.reviews-filter');
-    this.filters.classList.add('invisible');
+    this.data = data;
+    this.element = this.createReviewElement();
   };
 
   Review.prototype.setActiveLink = function() {
@@ -19,7 +14,9 @@ define(function() {
     this.quizElems = this.element.querySelectorAll('.review-quiz-answer');
     var self = this;
     self.quizContainer.onclick = function(event) {
-      if (event.target.tagName !== 'SPAN') return;
+      if (event.target.tagName !== 'SPAN') {
+        return;
+      }
       for (var i = 0; i < self.quizElems.length; i++) {
         if (self.quizElems[i].classList.contains('review-quiz-answer-active')) {
           self.quizElems[i].classList.remove('review-quiz-answer-active');
@@ -33,28 +30,27 @@ define(function() {
     self.quizContainer.onclick = null;
   };
 
-  Review.prototype.createReviewElement = function(review) {
-    this.review = review;
-    this.reviewElement = this.templateContainer.querySelector('.review').cloneNode(true);
-    this.reviewElement.querySelector('.review-rating').textContent = review.rating;
-    this.reviewElement.querySelector('.review-text').textContent = review.description;
-
-    var self = this;
-    this.reviewImage = new Image();
-    this.reviewImage.onload = function() {
-      self.imgTag = self.reviewElement.querySelector('.review-author');
-      self.imgTag.src = review.author.picture;
-      self.imgTag.alt = review.author.name;
-      self.imgTag.title = review.author.name;
-      self.imgTag.height = 124;
-      self.imgTag.width = 124;
+  Review.prototype.createReviewElement = function(data) {
+    var template = document.querySelector('#review-template');
+    var container = 'content' in template ? template.content : template;
+    var element = container.querySelector('.review').cloneNode(true);
+    element.querySelector('.review-rating').textContent = data.rating;
+    element.querySelector('.review-text').textContent = data.description;
+    var image = new Image();
+    image.onload = function() {
+      var imgTag = element.querySelector('.review-author');
+      imgTag.src = data.author.picture;
+      imgTag.alt = data.author.name;
+      imgTag.title = data.author.name;
+      imgTag.height = 124;
+      imgTag.width = 124;
     };
-    this.reviewImage.onerror = function() {
-      self.reviewElement.classList.add('review-load-failure');
+    image.onerror = function() {
+      element.classList.add('review-load-failure');
     };
-    this.reviewImage.src = review.author.picture;
-    this.filters.classList.remove('invisible');
-    return this.reviewElement;
+    image.src = data.author.picture;
+    return element;
   };
+
   return Review;
 });
