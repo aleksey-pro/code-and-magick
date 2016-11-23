@@ -6,7 +6,7 @@ define(function() {
 
   var Review = function(data) {
     this.data = data;
-    this.element = this.createReviewElement();
+    this.element = this.createReviewElement(data);
   };
 
   Review.prototype.setActiveLink = function() {
