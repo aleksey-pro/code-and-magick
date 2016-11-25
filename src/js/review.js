@@ -7,13 +7,10 @@ define(function() {
   var Review = function(data) {
     this.data = data;
     this.element = this.createReviewElement(data);
-  };
-
-  Review.prototype.setActiveLink = function() {
+    var self = this;
     this.quizContainer = this.element.querySelector('.review-quiz');
     this.quizElems = this.element.querySelectorAll('.review-quiz-answer');
-    var self = this;
-    self.quizContainer.onclick = function(event) {
+    this.quizContainer.onclick = function(event) {
       if (event.target.tagName !== 'SPAN') {
         return;
       }
@@ -24,10 +21,9 @@ define(function() {
         event.target.classList.add('review-quiz-answer-active');
       }
     };
-  };
-  Review.prototype.removeActiveLink = function() {
-    var self = this;
-    self.quizContainer.onclick = null;
+    this.remove = function() {
+      this.quizContainer.onclick = null;
+    };
   };
 
   Review.prototype.createReviewElement = function(data) {
@@ -53,4 +49,5 @@ define(function() {
   };
 
   return Review;
+
 });
