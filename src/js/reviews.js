@@ -39,7 +39,7 @@ define(['./review', './load'], function(Review, load) {
     loadReviews(filterID, pageNumber);
   };
 
-  var change = filters.addEventListener('click', function(evt) {
+  filters.addEventListener('click', function(evt) {
     if (evt.target.name === 'reviews') {
       changeFilter(evt.target.id);
     }

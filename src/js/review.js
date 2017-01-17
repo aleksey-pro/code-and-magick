@@ -3,7 +3,6 @@
 //отрисовка одного элемента списка
 
 define(function() {
-  
   var Review = function(data) {
     this.data = data;
     this.element = this.createReviewElement(data);
@@ -25,7 +24,6 @@ define(function() {
       this.quizContainer.onclick = null;
     };
   };
-  
   Review.prototype.createReviewElement = function(data) {
     var template = document.querySelector('#review-template');
     var container = 'content' in template ? template.content : template;
@@ -47,7 +45,5 @@ define(function() {
     image.src = data.author.picture;
     return element;
   };
-  
   return Review;
-  
 });
