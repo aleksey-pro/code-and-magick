@@ -499,20 +499,20 @@ define(function() {
            * @param {Object} state
            * @return {Verdict}
            */
-            function(state) {
-              return state.keysPressed.ESC ? Verdict.PAUSE : Verdict.CONTINUE;
-            },
+          function(state) {
+            return state.keysPressed.ESC ? Verdict.PAUSE : Verdict.CONTINUE;
+          },
           /**
            * Игра прекращается если игрок продолжает играть в нее два часа подряд.
            * @param {Object} state
            * @return {Verdict}
            */
-            function(state) {
-              return Date.now() - state.startTime > 3 * 60 * 1000 ?
-                Verdict.FAIL :
-                Verdict.CONTINUE;
-            }
-         ];
+          function(state) {
+            return Date.now() - state.startTime > 3 * 60 * 1000 ?
+              Verdict.FAIL :
+              Verdict.CONTINUE;
+          }
+        ];
       }
       // Проверка всех правил влияющих на уровень. Запускаем цикл проверок
       // по всем универсальным проверкам и проверкам конкретного уровня.
