@@ -481,12 +481,12 @@ define(function() {
          * @type {Array.<functions(Object):Verdict>}
          */
         this.commonRules = [
-          /**
-           * Если персонаж мертв, игра прекращается.
-           * @param {Object} state
-           * @return {Verdict}
-           */
-            function(state) {
+        /**
+         * Если персонаж мертв, игра прекращается.
+         * @param {Object} state
+         * @return {Verdict}
+         */
+          function(state) {
             var me = state.objects.filter(function(object) {
               return object.type === ObjectType.ME;
             })[0];
@@ -499,7 +499,7 @@ define(function() {
            * @param {Object} state
            * @return {Verdict}
            */
-            function(state) {
+          function(state) {
             return state.keysPressed.ESC ? Verdict.PAUSE : Verdict.CONTINUE;
           },
           /**
@@ -507,7 +507,7 @@ define(function() {
            * @param {Object} state
            * @return {Verdict}
            */
-            function(state) {
+          function(state) {
             return Date.now() - state.startTime > 3 * 60 * 1000 ?
               Verdict.FAIL :
               Verdict.CONTINUE;
@@ -656,7 +656,7 @@ define(function() {
 
   function parlx() {
     if (Date.now() - lastCall >= THROTTLE_TIMEOUT && clouds.getBoundingClientRect().bottom > 0) {
-      clouds.style.backgroundPositionX = parseInt(document.body.scrollTop * -0.5) + 'px';
+      clouds.style.backgroundPositionX = parseInt('document.body.scrollTop * -0.5', 10) + 'px';
     }
     lastCall = Date.now();
   }
