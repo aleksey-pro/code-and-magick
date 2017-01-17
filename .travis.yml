@@ -6,16 +6,25 @@ node_js:
 env:
   - TEST_CONFIG=eslint
   - TEST_CONFIG=basic
+  global:
+    secure: encrypted-github-token
 
 matrix:
   allow_failures:
     - env: TEST_CONFIG=basic
+
+before_script:
+  - git config --global user.email "anxieter@yandex.ru"
+  - git config --global user.name "davegahn"
+  - git remote rm origin
+  - git remote add origin https://user:${keyname}@github.com/davegahn/code-and-magick.git
 
 script:
   - export PR="https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST"
   - export GITHUB_BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo `curl -s $PR | jq .head.ref`; fi)
   - echo "GITHUB_BRANCH=$GITHUB_BRANCH, TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR"
   - npm test
+  - npm run deploy
 
 notifications:
   email: false
