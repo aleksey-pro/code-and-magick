@@ -9,10 +9,6 @@ env:
   global:
     secure: encrypted-github-token
 
-branches:
-  only:
-    - module7-task2
-
 matrix:
   allow_failures:
     - env: TEST_CONFIG=basic
